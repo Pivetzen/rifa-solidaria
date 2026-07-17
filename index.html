@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rifa Campanha</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --card-bg: #ffffff;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--background); color: var(--text); line-height: 1.6; padding: 20px; }
+        .container { max-width: 600px; margin: 0 auto; background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .banner { width: 100%; height: auto; border-radius: 8px; margin-bottom: 20px; object-fit: cover; }
+        h1 { font-size: 1.8rem; margin-bottom: 15px; text-align: center; color: #0f172a; }
+        .description { font-size: 1rem; margin-bottom: 25px; text-align: justify; }
+        .info-tags { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 10px; }
+        .tag { flex: 1; background: #f1f5f9; padding: 10px; text-align: center; border-radius: 6px; font-weight: bold; font-size: 0.9rem; }
+        .btn-action { display: block; width: 100%; text-align: center; background: var(--primary); color: white; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 1.1rem; transition: background 0.2s; }
+        .btn-action:hover { background: var(--primary-hover); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Imagem da Campanha -->
+    <img src="campanha.jpg" alt="Imagem da Rifa" class="banner">
+    
+    <h1>Nome da Grande Rifa</h1>
+    
+    <div class="description">
+        <p>Olá! Seja muito bem-vindo à nossa ação entre amigos. Participe e concorra a prêmios incríveis enquanto nos ajuda em nossa meta! O sorteio será realizado assim que todos os números forem preenchidos.</p>
+        <br>
+        <p><strong>Regulamento simples:</strong> Escolha seus números na próxima página, faça o pagamento e envie o comprovante para garantir a sua reserva.</p>
+    </div>
+
+    <div class="info-tags">
+        <div class="tag">🎟️ R$ 10,00 / número</div>
+        <div class="tag">📅 Sorteio: 30/10</div>
+    </div>
+
+    <!-- Botão que leva para a página da tabela -->
+    <a href="numeros.html" class="btn-action">Ver Números Disponíveis ➔</a>
+</div>
+
+</body>
+</html>
