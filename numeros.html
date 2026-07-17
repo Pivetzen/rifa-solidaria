@@ -76,28 +76,34 @@
     }
 
     function parsearCSV(textoCSV) {
+        // Se o texto contiver HTML, significa que o link retornou um erro do Google
+        if (textoCSV.includes('<!doctype html>') || textoCSV.includes('<html')) {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('loading').innerHTML = "<span style='color: #ef4444;'>Erro: O link da planilha parece inválido ou ela não está publicada como CSV. Verifique o Passo 2.</span>";
+            return;
+        }
+    
         const linhas = textoCSV.split('\n');
         const grid = document.getElementById('gridNumeros');
-        grid.innerHTML = ''; // Limpa o grid
-
-        // Ignora a primeira linha (cabeçalho) e percorre o resto
+        grid.innerHTML = ''; 
+    
+        // Detecta se a planilha usa ponto e vírgula (padrão Brasil) ou vírgula
+        const separador = textoCSV.includes(';') ? ';' : ',';
+    
         for (let i = 1; i < linhas.length; i++) {
-            if (!linhas[i].trim()) continue; // Ignora linhas vazias
-
-            // Divide as colunas por vírgula
-            const colunas = linhas[i].split(',');
+            if (!linhas[i].trim()) continue; 
+    
+            // Divide usando o separador correto
+            const colunas = linhas[i].split(separador);
             
             const numero = colunas[0]?.replace(/"/g, '').trim();
-            // Normaliza o status para evitar problemas com espaços ou maiúsculas
             const status = colunas[1]?.replace(/"/g, '').trim().toLowerCase() || 'livre';
-
+    
             if (!numero) continue;
-
-            // Cria o quadradinho do número
+    
             const card = document.createElement('div');
             card.classList.add('numero-card');
             
-            // Define a classe de cor baseada no status mapeado da planilha
             if (status === 'pago') {
                 card.classList.add('status-pago');
                 card.title = "Número já pago";
@@ -108,10 +114,8 @@
                 card.classList.add('status-livre');
                 card.title = "Clique para escolher este número";
                 
-                // Ação ao clicar em um número livre
                 card.addEventListener('click', () => {
                     alert(`Você selecionou o número ${numero}!`);
-                    // Aqui futuramente podemos abrir um modal ou redirecionar para o WhatsApp de compra
                 });
             }
             
