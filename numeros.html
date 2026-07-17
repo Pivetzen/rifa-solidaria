@@ -23,15 +23,16 @@
         .box-cor { width: 18px; height: 18px; border-radius: 4px; }
         
         /* Grid de Números */
-        .grid-numeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 10px; margin-bottom: 25px; }
-        .numero-card { height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); user-select: none; }
+        .grid-numeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(55px, 1fr)); gap: 10px; margin-bottom: 25px; }
+        .numero-card { height: 55px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); user-select: none; font-size: 1.1rem; transition: transform 0.1s; }
+        .numero-card:active { transform: scale(0.95); }
         
         /* Cores dos Status */
         .status-livre { background-color: var(--livre); color: #064e3b; }
         .status-reservado { background-color: var(--reservado); color: #713f12; cursor: not-allowed; }
         .status-pago { background-color: var(--pago); color: #7f1d1d; cursor: not-allowed; }
         
-        #loading { text-align: center; font-weight: bold; margin: 20px 0; }
+        #loading { text-align: center; font-weight: bold; margin: 20px 0; color: #64748b; }
     </style>
 </head>
 <body>
@@ -47,47 +48,74 @@
         <div class="legenda-item"><div class="box-cor" style="background-color: var(--pago)"></div> Pago</div>
     </div>
 
-    <div id="loading">Carregando números...</div>
+    <div id="loading">Buscando status dos números na planilha...</div>
     <div class="grid-numeros" id="gridNumeros"></div>
 </div>
 
 <script>
-    // URL da API ou do CSV do seu Google Sheets (vamos configurar assim que você me passar a estrutura)
-    const URL_PLANILHA = ''; 
+    // ⚠️ COLE AQUI O SEU LINK DO GOOGLE SHEETS (O LINK QUE TERMINA COM .csv)
+    const URL_PLANILHA = 'COLE_SEU_LINK_DO_CSV_AQUI'; 
 
     async function carregarNumeros() {
-        if (!URL_PLANILHA) {
-            // Mock temporário apenas para você ver o visual funcionando antes de integrar a planilha
-            gerarGridMock();
+        if (URL_PLANILHA === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSE1RcSlxJ_SLnrvDZEKtzsuRabnO6l1GX9HxBS-d1Pyx-E0VdokuiDuI1HXXQCA_zkGB5Wu-XKV_EN/pub?gid=0&single=true&output=csv') {
+            document.getElementById('loading').innerText = "Por favor, configure o link da sua planilha no código.";
             return;
         }
 
         try {
-            const response = await fetch(URL_PLANILHA);
+            // Força a busca atualizada ignorando o cache do navegador
+            const response = await fetch(`${URL_PLANILHA}?t=${new Date().getTime()}`);
             const data = await response.text();
+            
             document.getElementById('loading').style.display = 'none';
-            // A lógica de parse do CSV ou JSON da planilha entrará aqui
+            parsearCSV(data);
         } catch (error) {
             console.error("Erro ao buscar dados do Google Sheets:", error);
-            document.getElementById('loading').innerText = "Erro ao carregar os números.";
+            document.getElementById('loading').innerText = "Erro ao carregar os números da planilha. Verifique se ela foi publicada corretamente.";
         }
     }
 
-    function generarGridMock() {
-        document.getElementById('loading').style.display = 'none';
+    function parsearCSV(textoCSV) {
+        const linhas = textoCSV.split('\n');
         const grid = document.getElementById('gridNumeros');
-        const statusOpcoes = ['livre', 'reservado', 'pago'];
-        
-        // Simulação de 100 números para teste visual
-        for(let i = 1; i <= 100; i++) {
+        grid.innerHTML = ''; // Limpa o grid
+
+        // Ignora a primeira linha (cabeçalho) e percorre o resto
+        for (let i = 1; i < linhas.length; i++) {
+            if (!linhas[i].trim()) continue; // Ignora linhas vazias
+
+            // Divide as colunas por vírgula
+            const colunas = linhas[i].split(',');
+            
+            const numero = colunas[0]?.replace(/"/g, '').trim();
+            // Normaliza o status para evitar problemas com espaços ou maiúsculas
+            const status = colunas[1]?.replace(/"/g, '').trim().toLowerCase() || 'livre';
+
+            if (!numero) continue;
+
+            // Cria o quadradinho do número
             const card = document.createElement('div');
             card.classList.add('numero-card');
             
-            // Sorteia um status apenas para exibição no mock
-            const statusMock = statusOpcoes[Math.floor(Math.random() * statusOpcoes.length)];
-            card.classList.add(`status-${statusMock}`);
+            // Define a classe de cor baseada no status mapeado da planilha
+            if (status === 'pago') {
+                card.classList.add('status-pago');
+                card.title = "Número já pago";
+            } else if (status === 'reservado') {
+                card.classList.add('status-reservado');
+                card.title = "Número reservado";
+            } else {
+                card.classList.add('status-livre');
+                card.title = "Clique para escolher este número";
+                
+                // Ação ao clicar em um número livre
+                card.addEventListener('click', () => {
+                    alert(`Você selecionou o número ${numero}!`);
+                    // Aqui futuramente podemos abrir um modal ou redirecionar para o WhatsApp de compra
+                });
+            }
             
-            card.innerText = String(i).padStart(2, '0');
+            card.innerText = numero;
             grid.appendChild(card);
         }
     }
