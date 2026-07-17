@@ -34,9 +34,29 @@
         .info-tags { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 15px; }
         .tag { flex: 1; background: #fef3c7; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 1rem; border: 1px solid #fde68a; }
         
-        .sorteio-info-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 25px; font-size: 0.95rem; }
-        .sorteio-info-box h3 { margin-bottom: 8px; color: #78350f; font-size: 1.1rem; }
-        .sorteio-info-box ul { margin-left: 20px; }
+        /* Bloco de Metodologia do Sorteio */
+        .sorteio-info-box { 
+            background: #f8fafc; 
+            border-left: 4px solid var(--primary); 
+            padding: 15px; 
+            border-radius: 0 8px 8px 0; 
+            margin-bottom: 25px; 
+            font-size: 0.95rem; 
+        }
+        .sorteio-info-box h3 { 
+            margin-bottom: 8px; 
+            color: #78350f; 
+            font-size: 1.1rem; 
+        }
+        .sorteio-info-box ul { 
+            margin-left: 20px; 
+        }
+        
+        /* ADICIONE ESTA REGRA ABAIXO PARA JUSTIFICAR O TEXTO DOS ITENS */
+        .sorteio-info-box ul li {
+            text-align: justify;
+            margin-bottom: 6px; /* Adiciona um espacinho sutil entre um item e outro */
+        }
 
         .btn-action { display: block; width: 100%; text-align: center; background: var(--primary); color: white; padding: 16px; border-radius: 10px; text-decoration: none; font-weight: bold; font-size: 1.2rem; transition: background 0.2s, transform 0.1s; box-shadow: 0 4px 6px rgba(217, 119, 6, 0.2); }
         .btn-action:hover { background: var(--primary-hover); }
