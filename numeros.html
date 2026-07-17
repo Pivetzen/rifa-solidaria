@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolha seus Números</title>
+    <style>
+        :root {
+            --livre: #4ade80;
+            --reservado: #facc15;
+            --pago: #f87171;
+            --text-dark: #1e293b;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f8fafc; color: var(--text-dark); padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { margin-bottom: 20px; text-align: center; }
+        .btn-voltar { display: inline-block; margin-bottom: 20px; color: #2563eb; text-decoration: none; font-weight: bold; }
+        
+        /* Legenda */
+        .legenda { display: flex; justify-content: center; gap: 15px; margin-bottom: 25px; font-size: 0.9rem; }
+        .legenda-item { display: flex; align-items: center; gap: 5px; }
+        .box-cor { width: 18px; height: 18px; border-radius: 4px; }
+        
+        /* Grid de Números */
+        .grid-numeros { display: grid; grid-template-columns: repeat(auto-fill, minmax(50px, 1fr)); gap: 10px; margin-bottom: 25px; }
+        .numero-card { height: 50px; display: flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 6px; cursor: pointer; border: 1px solid rgba(0,0,0,0.05); user-select: none; }
+        
+        /* Cores dos Status */
+        .status-livre { background-color: var(--livre); color: #064e3b; }
+        .status-reservado { background-color: var(--reservado); color: #713f12; cursor: not-allowed; }
+        .status-pago { background-color: var(--pago); color: #7f1d1d; cursor: not-allowed; }
+        
+        #loading { text-align: center; font-weight: bold; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="btn-voltar">⬅ Voltar para Informações</a>
+    <h1>Escolha seus Números</h1>
+
+    <!-- Legenda explicativa -->
+    <div class="legenda">
+        <div class="legenda-item"><div class="box-cor" style="background-color: var(--livre)"></div> Livre</div>
+        <div class="legenda-item"><div class="box-cor" style="background-color: var(--reservado)"></div> Reservado</div>
+        <div class="legenda-item"><div class="box-cor" style="background-color: var(--pago)"></div> Pago</div>
+    </div>
+
+    <div id="loading">Carregando números...</div>
+    <div class="grid-numeros" id="gridNumeros"></div>
+</div>
+
+<script>
+    // URL da API ou do CSV do seu Google Sheets (vamos configurar assim que você me passar a estrutura)
+    const URL_PLANILHA = ''; 
+
+    async function carregarNumeros() {
+        if (!URL_PLANILHA) {
+            // Mock temporário apenas para você ver o visual funcionando antes de integrar a planilha
+            gerarGridMock();
+            return;
+        }
+
+        try {
+            const response = await fetch(URL_PLANILHA);
+            const data = await response.text();
+            document.getElementById('loading').style.display = 'none';
+            // A lógica de parse do CSV ou JSON da planilha entrará aqui
+        } catch (error) {
+            console.error("Erro ao buscar dados do Google Sheets:", error);
+            document.getElementById('loading').innerText = "Erro ao carregar os números.";
+        }
+    }
+
+    function generarGridMock() {
+        document.getElementById('loading').style.display = 'none';
+        const grid = document.getElementById('gridNumeros');
+        const statusOpcoes = ['livre', 'reservado', 'pago'];
+        
+        // Simulação de 100 números para teste visual
+        for(let i = 1; i <= 100; i++) {
+            const card = document.createElement('div');
+            card.classList.add('numero-card');
+            
+            // Sorteia um status apenas para exibição no mock
+            const statusMock = statusOpcoes[Math.floor(Math.random() * statusOpcoes.length)];
+            card.classList.add(`status-${statusMock}`);
+            
+            card.innerText = String(i).padStart(2, '0');
+            grid.appendChild(card);
+        }
+    }
+
+    carregarNumeros();
+</script>
+</body>
+</html>
