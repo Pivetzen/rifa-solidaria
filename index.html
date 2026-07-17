@@ -18,22 +18,22 @@
         h1 { font-size: 2rem; margin-bottom: 5px; text-align: center; color: #78350f; font-weight: 800; }
         .subtitle { text-align: center; font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 20px; letter-spacing: 1px; }
         
-        /* Galeria Dupla de Imagens */
-        .galeria-fotos { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
-        .banner { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; object-fit: cover; border: 1px solid rgba(69, 26, 3, 0.1); }
+        /* Foto da Campanha no topo */
+        .banner-principal { width: 100%; height: auto; max-height: 350px; border-radius: 12px; object-fit: cover; border: 1px solid rgba(69, 26, 3, 0.1); margin-bottom: 20px; }
         
-        .premio-box { background: #451a03; color: #fef3c7; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 25px; border: 2px dashed var(--primary); }
-        .premio-title { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24; }
-        .premio-nome { font-size: 1.3rem; font-weight: bold; margin-top: 5px; }
+        /* Seção Combinada do Prêmio (Lado a Lado) */
+        .secao-premio { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 15px; margin-bottom: 25px; align-items: center; }
+        .premio-box { background: #451a03; color: #fef3c7; padding: 20px 15px; border-radius: 12px; text-align: center; border: 2px dashed var(--primary); height: 100%; display: flex; flex-direction: column; justify-content: center; }
+        .premio-title { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24; margin-bottom: 5px; }
+        .premio-nome { font-size: 1.2rem; font-weight: bold; }
+        .foto-premio { width: 100%; aspect-ratio: 1 / 1; border-radius: 12px; object-fit: cover; border: 1px solid rgba(69, 26, 3, 0.1); }
         
         .description { font-size: 1rem; margin-bottom: 25px; text-align: justify; }
         .description p { margin-bottom: 12px; }
         
-        /* Tags de Informação Atualizadas */
         .info-tags { display: flex; justify-content: space-between; margin-bottom: 25px; gap: 15px; }
         .tag { flex: 1; background: #fef3c7; padding: 12px; text-align: center; border-radius: 8px; font-weight: bold; font-size: 1rem; border: 1px solid #fde68a; }
         
-        /* Bloco de Metodologia do Sorteio */
         .sorteio-info-box { background: #f8fafc; border-left: 4px solid var(--primary); padding: 15px; border-radius: 0 8px 8px 0; margin-bottom: 25px; font-size: 0.95rem; }
         .sorteio-info-box h3 { margin-bottom: 8px; color: #78350f; font-size: 1.1rem; }
         .sorteio-info-box ul { margin-left: 20px; }
@@ -42,8 +42,10 @@
         .btn-action:hover { background: var(--primary-hover); }
         .btn-action:active { transform: scale(0.98); }
 
-        @media (max-width: 480px) {
-            .galeria-fotos { grid-template-columns: 1fr; } /* Fotos ficam uma embaixo da outra no celular */
+        /* Ajuste responsivo para telas pequenas */
+        @media (max-width: 500px) {
+            .secao-premio { grid-template-columns: 1fr; } /* Empilha o texto e a foto do prêmio no celular */
+            .premio-box { padding: 15px; }
         }
     </style>
 </head>
@@ -53,15 +55,16 @@
     <h1>RIFA SOLIDÁRIA</h1>
     <div class="subtitle">🐾 POR ELES! 🐾</div>
     
-    <!-- Galeria com as duas imagens -->
-    <div class="galeria-fotos">
-        <img src="campanha.jpg" alt="Cães Resgatados" class="banner">
-        <img src="premio.jpg" alt="Fritadeira Air Fryer 25L" class="banner">
-    </div>
+    <!-- Imagem dos Cachorros no Topo -->
+    <img src="campanha.jpg" alt="Cães Resgatados" class="banner-principal">
     
-    <div class="premio-box">
-        <div class="premio-title">🎁 Concorra a uma 🎁</div>
-        <div class="premio-nome">FRITADEIRA AIR FRYER 25L MONDIAL PRETO INOX 22V</div> 
+    <!-- Seção do Prêmio e Foto Lado a Lado -->
+    <div class="secao-premio">
+        <div class="premio-box">
+            <div class="premio-title">🎁 Concorra a uma 🎁</div>
+            <div class="premio-nome">FRITADEIRA AIR FRYER 25L MONDIAL PRETO INOX 22V</div> 
+        </div>
+        <img src="premio.jpg" alt="Fritadeira Air Fryer 25L" class="foto-premio">
     </div>
     
     <div class="description">
@@ -72,16 +75,13 @@
 
     <div class="info-tags">
         <div class="tag">🎟️ Valor: R$ 10,00</div>
-        <!-- ⚠️ ALTERE A DATA DO SORTEIO ABAIXO -->
         <div class="tag">📅 Sorteio: Definir Data</div>
     </div>
 
-    <!-- Bloco de Estrutura do Sorteio -->
     <div class="sorteio-info-box">
         <h3>ℹ️ Como funcionará o sorteio?</h3>
         <p>A definição do ganhador será realizada seguindo os critérios abaixo:</p>
         <ul>
-            <!-- ⚠️ ALTERE OU DETALHE OS TÓPICOS ABAIXO QUANDO DECIDIR A METODOLOGIA -->
             <li>O sorteio ocorrerá assim que todos os 200 pontos forem fechados.</li>
             <li>A metodologia (ex: extração da Loteria Federal ou sistema online ao vivo) será informada previamente a todos os participantes.</li>
             <li>O resultado será divulgado nas redes sociais e o proprietário entrará em contato direto com o ganhador.</li>
