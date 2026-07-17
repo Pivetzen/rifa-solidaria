@@ -53,54 +53,50 @@
 </div>
 
 <script>
-    // ⚠️ COLE AQUI O SEU LINK DO GOOGLE SHEETS (O LINK QUE TERMINA COM .csv)
-    const URL_PLANILHA = 'COLE_SEU_LINK_DO_CSV_AQUI'; 
+    // Link direto da sua planilha publicado como CSV
+    const URL_PLANILHA = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSE1RcSlxJ_SLnrvDZEKtzsuRabnO6l1GX9HxBS-d1Pyx-E0VdokuiDuI1HXXQCA_zkGB5Wu-XKV_EN/pub?gid=0&single=true&output=csv'; 
 
     async function carregarNumeros() {
-        if (URL_PLANILHA === 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSE1RcSlxJ_SLnrvDZEKtzsuRabnO6l1GX9HxBS-d1Pyx-E0VdokuiDuI1HXXQCA_zkGB5Wu-XKV_EN/pub?gid=0&single=true&output=csv') {
-            document.getElementById('loading').innerText = "Por favor, configure o link da sua planilha no código.";
-            return;
-        }
-
         try {
-            // Força a busca atualizada ignorando o cache do navegador
-            const response = await fetch(`${URL_PLANILHA}?t=${new Date().getTime()}`);
+            // Força a busca ignorando o cache do navegador para trazer atualizações em tempo real
+            const response = await fetch(`${URL_PLANILHA}&t=${new Date().getTime()}`);
             const data = await response.text();
             
             document.getElementById('loading').style.display = 'none';
             parsearCSV(data);
         } catch (error) {
             console.error("Erro ao buscar dados do Google Sheets:", error);
-            document.getElementById('loading').innerText = "Erro ao carregar os números da planilha. Verifique se ela foi publicada corretamente.";
+            document.getElementById('loading').innerText = "Erro ao carregar os números da planilha. Verifique sua conexão ou se a planilha está publicada.";
         }
     }
 
     function parsearCSV(textoCSV) {
-        // Se o texto contiver HTML, significa que o link retornou um erro do Google
+        // Validação simples para conferir se o retorno não é uma página HTML de erro
         if (textoCSV.includes('<!doctype html>') || textoCSV.includes('<html')) {
             document.getElementById('loading').style.display = 'block';
-            document.getElementById('loading').innerHTML = "<span style='color: #ef4444;'>Erro: O link da planilha parece inválido ou ela não está publicada como CSV. Verifique o Passo 2.</span>";
+            document.getElementById('loading').innerHTML = "<span style='color: #ef4444;'>Erro: O link retornou uma página web em vez de dados CSV. Verifique a publicação.</span>";
             return;
         }
-    
+
         const linhas = textoCSV.split('\n');
         const grid = document.getElementById('gridNumeros');
         grid.innerHTML = ''; 
-    
-        // Detecta se a planilha usa ponto e vírgula (padrão Brasil) ou vírgula
+
+        // Detecta dinamicamente se o separador usado é o ponto e vírgula (comum no Brasil) ou vírgula
         const separador = textoCSV.includes(';') ? ';' : ',';
-    
+
+        // Ignora a primeira linha de cabeçalhos (Numero, Status, Nome, Telefone)
         for (let i = 1; i < linhas.length; i++) {
             if (!linhas[i].trim()) continue; 
-    
-            // Divide usando o separador correto
+
             const colunas = linhas[i].split(separador);
             
+            // Remove aspas caso o CSV venha encapsulado
             const numero = colunas[0]?.replace(/"/g, '').trim();
             const status = colunas[1]?.replace(/"/g, '').trim().toLowerCase() || 'livre';
-    
+
             if (!numero) continue;
-    
+
             const card = document.createElement('div');
             card.classList.add('numero-card');
             
@@ -114,6 +110,7 @@
                 card.classList.add('status-livre');
                 card.title = "Clique para escolher este número";
                 
+                // Evento ao clicar em um número disponível
                 card.addEventListener('click', () => {
                     alert(`Você selecionou o número ${numero}!`);
                 });
@@ -124,6 +121,7 @@
         }
     }
 
+    // Inicializa a carga dos dados
     carregarNumeros();
 </script>
 </body>
